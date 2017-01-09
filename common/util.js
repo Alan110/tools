@@ -51,41 +51,40 @@ var utils = {
         return parent;
     },
 
-        /**
-         * 数据序列化处理
-         *
-         * @param obj
-         * @returns {string}
-         */
-        serialize: function (obj) {
-            if (!obj) {
-                return '';
-            }
+    /**
+     * 数据序列化处理
+     *
+     * @param obj
+     * @returns {string}
+     */
+    serialize: function(obj) {
+        if (!obj) {
+            return '';
+        }
 
-            var str = '';
-            var item = '';
-            if (this.isObject(obj)) {
-                for (var k in obj) {
-                    item = obj[k];
-                    if (typeof item === 'undefined') {
-                        continue;
-                    }
-
-                    if (this.isObject(item)) {
-                        item = JSON.stringify(item);
-                    }
-
-                    str += k + '=' + encodeURIComponent(item) + '&';
+        var str = '';
+        var item = '';
+        if (this.isObject(obj)) {
+            for (var k in obj) {
+                item = obj[k];
+                if (typeof item === 'undefined') {
+                    continue;
                 }
-                str = str.substring(0, str.length - 1); // 去掉末尾的&
-            }
-            else if (this.isString(obj)) {
-                str = obj;
-            }
 
-            return str;
-        },
+                if (this.isObject(item)) {
+                    item = JSON.stringify(item);
+                }
 
-    
+                str += k + '=' + encodeURIComponent(item) + '&';
+            }
+            str = str.substring(0, str.length - 1); // 去掉末尾的&
+        } else if (this.isString(obj)) {
+            str = obj;
+        }
+
+        return str;
+    },
+
+
 
 }
