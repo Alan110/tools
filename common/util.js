@@ -85,6 +85,36 @@ var utils = {
         return str;
     },
 
+    /*
+     * 节流函数，每过多少ms执行一次，中间不管调用多少次
+     *
+     * */
+    throttle: function(delay, action) {
+        var last = 0
+        return function() {
+            var curr = +new Date()
+            if (curr - last > delay) {
+                action.apply(this, arguments)
+                last = curr
+            }
+        }
+    },
+
+    /*
+     * 限流函数，只有定下来，经过ms后，才执行
+     * */
+    debounce : function(idle, action) {
+        var last
+        return function() {
+            var ctx = this,
+                args = arguments
+            clearTimeout(last)
+            last = setTimeout(function() {
+                action.apply(ctx, args)
+            }, idle)
+        }
+    }
+
 
 
 }
