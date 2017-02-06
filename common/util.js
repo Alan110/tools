@@ -53,7 +53,7 @@ var utils = {
 
     /**
      * 数据序列化处理
-     *
+     * 1层对象为querystirng，二层对象会被序列号为json字符串
      * @param obj
      * @returns {string}
      */
@@ -87,7 +87,7 @@ var utils = {
 
     /*
      * 节流函数，每过多少ms执行一次，中间不管调用多少次
-     *
+     * 原理是计算当前时间与上一次刻度点时间的差, 每执行一次更新刻度时间点
      * */
     throttle: function(delay, action) {
         var last = 0
@@ -102,8 +102,9 @@ var utils = {
 
     /*
      * 限流函数，只有定下来，经过ms后，才执行
+     * 原理就是不停的settimeout
      * */
-    debounce : function(idle, action) {
+    debounce: function(idle, action) {
         var last
         return function() {
             var ctx = this,
@@ -113,7 +114,23 @@ var utils = {
                 action.apply(ctx, args)
             }, idle)
         }
+    },
+
+    /*
+     * 管道函数，第一函数的返回值作为第二个函数的参数, 依次执行, 做filter的时候很管用
+     * 将函数执行顺序以参数的形式体现。
+     * */
+    compose : function() {
+        var args = arguments;
+        var start = args.length - 1;
+        return function() {
+            var i = start;
+            var result = args[start].apply(this, arguments);
+            while (i--) result = args[i].call(this, result);
+            return result;
+        };
     }
+
 
 
 
